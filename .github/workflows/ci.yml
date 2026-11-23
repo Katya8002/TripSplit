@@ -11,6 +11,9 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      SECRET_KEY: ci-test-key
+      DEBUG: "True"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
