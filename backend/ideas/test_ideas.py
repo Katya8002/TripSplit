@@ -58,3 +58,23 @@ def test_stranger_cannot_create_idea(trip, stranger):
 def test_anonymous_cannot_access_ideas(trip):
     response = APIClient().get(f"/api/trips/{trip.id}/ideas/")
     assert response.status_code in (401, 403)
+
+
+def test_filter_by_category(trip, member):
+    client = client_for(member)
+    client.post(f"/api/trips/{trip.id}/ideas/", {"title": "Cafe", "category": "food"})
+    client.post(f"/api/trips/{trip.id}/ideas/", {"title": "Park", "category": "nature"})
+    response = client.get(f"/api/trips/{trip.id}/ideas/?category=food")
+    assert response.status_code == 200
+    assert len(response.data) == 1
+    assert response.data[0]["title"] == "Cafe"
+
+
+def test_filter_by_price(trip, member):
+    client = client_for(member)
+    client.post(f"/api/trips/{trip.id}/ideas/", {"title": "Cheap", "price": "10"})
+    client.post(f"/api/trips/{trip.id}/ideas/", {"title": "Pricey", "price": "100"})
+    response = client.get(f"/api/trips/{trip.id}/ideas/?price_max=50")
+    assert response.status_code == 200
+    assert len(response.data) == 1
+    assert response.data[0]["title"] == "Cheap"
