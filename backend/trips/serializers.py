@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Trip
+from .models import Trip, TripMember
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -32,3 +32,14 @@ class TripSerializer(serializers.ModelSerializer):
                 {"end_date": "Дата завершення не може бути раніше за дату початку"}
             )
         return data
+
+class TripMemberSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username", read_only=True)
+
+    class Meta:
+        model = TripMember
+        fields = ("id", "user", "username", "role", "joined_at")
+
+
+class JoinTripSerializer(serializers.Serializer):
+    invite_code = serializers.UUIDField()
