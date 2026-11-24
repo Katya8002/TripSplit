@@ -78,3 +78,47 @@ def test_filter_by_price(trip, member):
     assert response.status_code == 200
     assert len(response.data) == 1
     assert response.data[0]["title"] == "Cheap"
+
+
+def create_idea(client, trip):
+    response = client.post(f"/api/trips/{trip.id}/ideas/", {"title": "Cafe"})
+    return response.data["id"]
+
+
+def test_like_idea(trip, member):
+    client = client_for(member)
+    idea_id = create_idea(client, trip)
+    response = client.post(
+        f"/api/trips/{trip.id}/ideas/{idea_id}/react/", {"value": 1}
+    )
+    assert response.status_code == 200
+    assert response.data["likes_count"] == 1
+    assert response.data["my_reaction"] == 1
+
+
+def test_repeated_reaction_replaces_previous(trip, member):
+    client = client_for(member)
+    idea_id = create_idea(client, trip)
+    url = f"/api/trips/{trip.id}/ideas/{idea_id}/react/"
+    client.post(url, {"value": 1})
+    response = client.post(url, {"value": -1})
+    assert response.data["likes_count"] == 0
+    assert response.data["dislikes_count"] == 1
+    assert response.data["my_reaction"] == -1
+
+
+def test_invalid_reaction_value(trip, member):
+    client = client_for(member)
+    idea_id = create_idea(client, trip)
+    response = client.post(
+        f"/api/trips/{trip.id}/ideas/{idea_id}/react/", {"value": 5}
+    )
+    assert response.status_code == 400
+
+
+def test_stranger_cannot_react(trip, member, stranger):
+    idea_id = create_idea(client_for(member), trip)
+    response = client_for(stranger).post(
+        f"/api/trips/{trip.id}/ideas/{idea_id}/react/", {"value": 1}
+    )
+    assert response.status_code == 404
