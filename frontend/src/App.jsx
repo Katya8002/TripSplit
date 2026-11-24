@@ -5,6 +5,7 @@ import LoginPage from "./features/auth/LoginPage";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
 import RegisterPage from "./features/auth/RegisterPage";
 import TripsPage from "./features/trips/TripsPage";
+import IdeasPage from "./features/ideas/IdeasPage";
 
 export default function App() {
   return (
@@ -15,6 +16,9 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/trips" element={<TripsPage />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/trips/:tripId" element={<IdeasPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/trips" replace />} />
         </Routes>
