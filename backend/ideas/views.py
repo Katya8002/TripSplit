@@ -1,14 +1,16 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from trips.models import Trip, TripMember
 
 from .filters import IdeaFilter
-from .models import Idea
-from .serializers import IdeaSerializer
+from .models import Idea, IdeaReaction
+from .serializers import IdeaSerializer, ReactionSerializer
 
 
 class IdeaViewSet(viewsets.ModelViewSet):
@@ -29,3 +31,15 @@ class IdeaViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(trip=self.get_trip(), author=self.request.user)
+
+    @action(detail=True, methods=["post"])
+    def react(self, request, trip_id=None, pk=None):
+        idea = self.get_object()
+        input_serializer = ReactionSerializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
+        IdeaReaction.objects.update_or_create(
+            idea=idea,
+            user=request.user,
+            defaults={"value": input_serializer.validated_data["value"]},
+        )
+        return Response(self.get_serializer(idea).data)

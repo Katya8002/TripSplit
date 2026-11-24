@@ -37,3 +37,23 @@ class Idea(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class IdeaReaction(models.Model):
+    class Value(models.IntegerChoices):
+        LIKE = 1, "Like"
+        DISLIKE = -1, "Dislike"
+
+    idea = models.ForeignKey(Idea, on_delete=models.CASCADE, related_name="reactions")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="idea_reactions",
+    )
+    value = models.SmallIntegerField(choices=Value.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["idea", "user"], name="unique_idea_reaction"),
+        ]
