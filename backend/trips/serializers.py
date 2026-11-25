@@ -17,6 +17,7 @@ class TripSerializer(serializers.ModelSerializer):
             "invite_code",
             "created_at",
             "my_role",
+            "reminders_enabled",
         )
         read_only_fields = ("invite_code", "created_at")
 
