@@ -17,6 +17,7 @@ class ScheduleItem(models.Model):
     location = models.CharField(max_length=255, blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
+    reminder_sent = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["start"]
