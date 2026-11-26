@@ -1,5 +1,11 @@
 import { CATEGORY_LABELS } from "./categories";
 
+const STATUS_LABELS = {
+  proposed: "Пропозиція",
+  approved: "Затверджено",
+  rejected: "Відхилено",
+};
+
 export default function IdeaCard({ idea, onReact }) {
   const liked = idea.my_reaction === 1;
   const disliked = idea.my_reaction === -1;
@@ -12,6 +18,7 @@ export default function IdeaCard({ idea, onReact }) {
         {idea.price !== null && ` · ${idea.price} грн`}
         {idea.duration_minutes !== null && ` · ${idea.duration_minutes} хв`}
       </p>
+      <p>Статус: {STATUS_LABELS[idea.status]}</p>
       {idea.address && <p>{idea.address}</p>}
       {idea.link && (
         <p>

@@ -89,8 +89,9 @@ export default function TripPage() {
         ))}
       </ul>
 
-      <nav>
-        <NavLink to="ideas">Ідеї</NavLink> <NavLink to="schedule">Розклад</NavLink>{" "}
+        <nav>
+        <NavLink to="ideas">Ідеї</NavLink> <NavLink to="polls">Голосування</NavLink>{" "}
+        <NavLink to="schedule">Розклад</NavLink>{" "}
         <NavLink to="expenses">Витрати</NavLink>
       </nav>
       <Outlet />
