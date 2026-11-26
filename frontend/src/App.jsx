@@ -9,6 +9,7 @@ import SchedulePage from "./features/trips/SchedulePage";
 import TabPlaceholder from "./features/trips/TabPlaceholder";
 import TripPage from "./features/trips/TripPage";
 import TripsPage from "./features/trips/TripsPage";
+import IdeasRoute from "./features/ideas/IdeasRoute";
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
             <Route path="/trips" element={<TripsPage />} />
             <Route path="/trips/:id" element={<TripPage />}>
               <Route index element={<Navigate to="ideas" replace />} />
-              <Route path="ideas" element={<TabPlaceholder title="Ідеї" />} />
+              <Route path="ideas" element={<IdeasRoute />} />
               <Route path="schedule" element={<SchedulePage />} />
               <Route path="expenses" element={<TabPlaceholder title="Витрати" />} />
             </Route>
