@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/', include('ideas.urls')),
     path("api/", include("schedule.urls")),
     path("api/", include("expenses.urls")),
+    path('api/', include('polls.urls')),
 ]

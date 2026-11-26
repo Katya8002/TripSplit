@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'expenses',
     'ideas',
     'schedule',
+    'polls',
 ]
 
 MIDDLEWARE = [
